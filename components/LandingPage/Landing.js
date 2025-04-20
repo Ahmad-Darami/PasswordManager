@@ -1,8 +1,12 @@
 import React from 'react';
 import styled from 'styled-components';
+import GlobalStyle from '/pages/_app.js'; 
+import { useRouter } from 'next/router';
+import {handleConnectWallet} from '/components/Dashboard/Navbar'
 
 
 const Landing = () => {
+  const router = useRouter();
   return (
     <Section>
       <Overlay>
@@ -14,7 +18,7 @@ const Landing = () => {
             </Header>
             <SubheaderAndStarsColumn>
               {/* <SubHeader>Insert creative subheader here</SubHeader> */}
-              <CTAButton>Get Started</CTAButton>
+              <CTAButton onClick = {handleConnectWallet} >Get Started</CTAButton>
             </SubheaderAndStarsColumn>
           </HeroTextColumn>
         </Container>
@@ -26,9 +30,9 @@ const Landing = () => {
 const Section = styled.section`
   display: flex;
   flex-direction: column;
-  height: 100vh;
+  height: 85vh;
   color: #fff;
-  background: linear-gradient(120deg, #6a11cb 0%, #2575fc 100%);
+  background: linear-gradient(150deg, #6a11cb 0%, #2575fc 100%);
   position: relative;
 `;
 
@@ -63,8 +67,7 @@ const Header = styled.h1`
   text-align: center;
   overflow: hidden;
   font-family: '';
-  
-  }
+  font-family: 'JetBrains Mono', monospace;
 `;
 
 const Highlight = styled.span`
@@ -84,19 +87,6 @@ const SubheaderAndStarsColumn = styled.div`
 `;
 
 const CTAButton = styled.button`
-  // margin-top: 20px;
-  // padding: 10px 20px;
-  // font-size: 1rem;
-  // color: #fff;
-  // background-color:rgb(17, 77, 141);
-  // border: none;
-  // border-radius: 3px;
-  // cursor: pointer;
-  // transition: background-color 0.2s ease-in-out;
-
-  // &:hover {
-  //   background-color: #0056b3;
-  // }
    align-items: center;
   appearance: none;
   background-color: #EEF2FF;

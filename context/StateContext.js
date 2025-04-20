@@ -1,6 +1,6 @@
 import { useRouter } from 'next/router';
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import { setUserId } from 'firebase/analytics'
+import {ethers} from 'ethers';
 
 const Context = createContext();
 
@@ -12,31 +12,47 @@ export const StateContext = ({ children }) => {
   const router = useRouter()
   const { asPath } = useRouter()
 
-  // Main Use Effects for Initializing Variables
-  useEffect(() => {
-    if(router.isReady){
-      if(window.localStorage.getItem("userAuthToken") !== null){
-        console.log('user is already logged in')
-        setUser(JSON.parse(window.localStorage.getItem("userAuthToken")));
-      }
-
-      // if the user is on a page that needs auth, he gets redirected to landing page
-      if(window.localStorage.getItem("userAuthToken") == null && (asPath.includes('/dashboard'))){
-        router.push('/')
-      }  
+  const connectWallet = async () => {
+    if (typeof window.ethereum !== 'undefined') {
+      const provider = new ethers.providers.Web3Provider(window.ethereum);
+      await provider.send("eth_requestAccounts", []);
+      const signer = provider.getSigner();
+      const address = await signer.getAddress();
+      return { provider, signer, address };
+    } else {
+      throw new Error("MetaMask not found");
     }
-  }, [router.isReady])
+  };
+  
+  const handleConnectWallet = async (e) => {
+    try {
+      const { address } = await connectWallet();
+      console.log("Connected wallet:", address);
+      setUser(address); // Set in global state (if storing address)
+    } catch (err) {
+      console.error("Wallet connection failed:", err);
+    }
+  };
 
-return(
+  const logOutWallet = () => {
+    setUser(null);
+    localStorage.removeItem("walletAddress"); // Optional
+  };
+
+
+  return (
     <Context.Provider
-    value={{
+      value={{
         user,
-        setUser
-    }}
+        setUser,
+        connectWallet,
+        handleConnectWallet,
+        logOutWallet,
+      }}
     >
       {children}
     </Context.Provider>
-    )
-}
+  );
+};
 
 export const useStateContext = () => useContext(Context);

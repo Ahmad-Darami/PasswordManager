@@ -15,6 +15,7 @@ export const GlobalStyle = createGlobalStyle`
 export default function App({ Component, pageProps }) {
   return (
     <>
+    
         <Head>
           <title>BlockPass</title>
           <meta name='description' content='Put a description here about your app'/>

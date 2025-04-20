@@ -12,33 +12,13 @@ import Home from '@/components/Dashboard/Home'
 
 
 
-
 const Navbar = () => {
-  const { user,setUser } = useStateContext()
-  
-  const connectWallet = async () => {
-    if (typeof window.ethereum !== 'undefined') {
-      const provider = new ethers.providers.Web3Provider(window.ethereum);
-      await provider.send("eth_requestAccounts", []);
-      const signer = provider.getSigner();
-      const address = await signer.getAddress();
-      return { provider, signer, address };
-    } else {
-      throw new Error("MetaMask not found");
-    }
+  const { user, connectWallet, handleConnectWallet, logOutWallet } = useStateContext()
+
+  const login = async () => {
+  await handleConnectWallet();
   };
-  
-  const handleConnectWallet = async (e) => {
-    e.preventDefault(); // prevents default <a> tag behavior
-  
-    try {
-      const { address } = await connectWallet();
-      console.log("Connected wallet:", address);
-      setUser(address); // Set in global state (if storing address)
-    } catch (err) {
-      console.error("Wallet connection failed:", err);
-    }
-  };
+
 
   return (
     <Nav>
@@ -52,7 +32,7 @@ const Navbar = () => {
             Wallet ID {user.slice(0, 6)}...{user.slice(-4)}
           </WalletTag>
         ) : (
-          <Walletbutton onClick={handleConnectWallet}>Connect Wallet</Walletbutton>
+          <Walletbutton onClick={login}>Connect Wallet</Walletbutton>
       )}
       </NavLinks>
     </Nav>

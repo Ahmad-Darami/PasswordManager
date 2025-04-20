@@ -2,57 +2,9 @@ import React, { useState, useEffect } from 'react'
 import styled from 'styled-components'
 import Link from 'next/link'
 import Navbar from '@/components/Dashboard/Navbar'
-import PhotoUploader from '@/components/PhotoUploader'
-import { useStateContext } from '@/context/StateContext'
-import { getAllUserPhotos } from '@/backend/Database'
+
 const Dashboard = () => {
 
-  const { user } = useStateContext()
-  const [ photoData, setPhotoData ] = useState()
-  useEffect(() => {
-    if(user){
-      (async () => {
-        console.log('this is the user ID', user.uid)
-          const userPhotos = await getAllUserPhotos(user)
-          console.log('here are the photos', userPhotos)
-          setPhotoData(orderPhotos(userPhotos))
-      })()
-    }
-  }, [user])
-
-  function orderPhotos(photos) {
-   
-    photos.sort((a, b) => {
-      const dateA = a.date.toDate ? a.date.toDate() : new Date(a.date.seconds * 1000);
-      const dateB = b.date.toDate ? b.date.toDate() : new Date(b.date.seconds * 1000);
-    
-      return dateB - dateA; // Sort in descending order
-    });
-    return photos;
-  }
-
-  function convertToStringDate(object){
-    const date = new Date(object.seconds * 1000); 
-    const month = date.getMonth() + 1;
-    const day = date.getDate();
-    const year = date.getFullYear();
-    const dateString = `${month}-${day}-${year}`;
-    return dateString
-  }
-
-  function makePhotoComponent(photo, index){
-    return (<PhotoInfoContainer key={index} status={photo.status}>
-      <DetailsColumn>
-        <PhotoName>{photo.name}</PhotoName>
-      </DetailsColumn>
-        <DateDisplay>
-          {photo.date ? convertToStringDate(photo.date) : ''}
-        </DateDisplay>
-        <ActionButton href={`/photos/${photo.location}`}> { /* this should ideally be photo.id instead */}
-              Click to View Photo
-        </ActionButton>
-      </PhotoInfoContainer>)
-  }
 
 
   return (
@@ -60,22 +12,10 @@ const Dashboard = () => {
         <Navbar/>
         
         <Section>
-          <PhotoUploaderContainer>
-            <PhotoUploader photos={photoData} setPhotos={setPhotoData}/>
-          </PhotoUploaderContainer>
           <RightSide>
-            <Title>Your Photos</Title>
+            <Title>Dashboard</Title>
 
             <ScrollableMainSection>
-                {photoData ? 
-                <>
-                {photoData.length > 0 ? 
-                <>
-                    {photoData.map(makePhotoComponent)}
-                </> 
-                : <>No Photos Yet</>}
-                </>
-                : <>Loading Your Photos</>}
             </ScrollableMainSection>
             </RightSide>
 
