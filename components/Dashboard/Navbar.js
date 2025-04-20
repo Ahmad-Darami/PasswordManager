@@ -11,9 +11,6 @@ import Home from '@/components/Dashboard/Home'
 const Navbar = () => {
   const { user, handleConnectWallet, logOutWallet } = useStateContext()
 
-  const login = async () => {
-  await handleConnectWallet();
-  };
 
   const logout = async () => {
   await logOutWallet();
@@ -24,7 +21,7 @@ const Navbar = () => {
     <Nav>
       <NavLinks>
       <Logo href="/">BlockPass</Logo>
-      <ButtonLink onClick={console.log(ethers.providers)} href="/dashboard">Dashboard</ButtonLink>
+      <ButtonLink href="/dashboard">Dashboard</ButtonLink>
       </NavLinks>
       <NavLinks>
       {user ? (
@@ -35,7 +32,8 @@ const Navbar = () => {
           <Walletbutton onClick={logout}>Log Out</Walletbutton>
           </>
         ) : (
-          <Walletbutton onClick={login}>Connect Wallet</Walletbutton>
+          <></>
+          // <Walletbutton onClick={''}>Connect Wallet</Walletbutton>
       )}
       </NavLinks>
     </Nav>
