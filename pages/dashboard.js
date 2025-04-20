@@ -2,12 +2,21 @@ import React, { useState, useEffect } from 'react'
 import styled from 'styled-components'
 import Link from 'next/link'
 import Navbar from '@/components/Dashboard/Navbar'
+import { useStateContext } from '@/context/StateContext';
+import { useRouter } from 'next/router';
 
 const Dashboard = () => {
+  const { user, handleConnectWallet, logOutWallet } = useStateContext();
+  const router = useRouter();
+  if (user == null) {
+    router.push('/')
 
-
+  }
+  
 
   return (
+    
+
     <>
         <Navbar/>
         
@@ -15,7 +24,10 @@ const Dashboard = () => {
           <RightSide>
             <Title>Dashboard</Title>
 
+            <InfoContainer>User Wallet ID {user}</InfoContainer>
+            
             <ScrollableMainSection>
+            
             </ScrollableMainSection>
             </RightSide>
 
@@ -64,7 +76,7 @@ const ScrollableMainSection = styled.div`
 `;
 
 
-const PhotoInfoContainer = styled.div`
+const InfoContainer = styled.div`
   display: flex;
   justify-content: space-between; /* Spreads content across the container */
   align-items: center;

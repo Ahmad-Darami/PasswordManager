@@ -8,16 +8,16 @@ import Home from '@/components/Dashboard/Home'
 
 
 
-
-
-
-
 const Navbar = () => {
-  const { user, connectWallet, handleConnectWallet, logOutWallet } = useStateContext()
+  const { user, handleConnectWallet, logOutWallet } = useStateContext()
 
   const login = async () => {
   await handleConnectWallet();
   };
+
+  const logout = async () => {
+  await logOutWallet();
+  }
 
 
   return (
@@ -28,9 +28,12 @@ const Navbar = () => {
       </NavLinks>
       <NavLinks>
       {user ? (
+          <>
           <WalletTag>
             Wallet ID {user.slice(0, 6)}...{user.slice(-4)}
           </WalletTag>
+          <Walletbutton onClick={logout}>Log Out</Walletbutton>
+          </>
         ) : (
           <Walletbutton onClick={login}>Connect Wallet</Walletbutton>
       )}

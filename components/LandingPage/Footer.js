@@ -6,15 +6,13 @@ const Footer = () => {
     <FooterSection>
       <FooterContainer>
         <LeftContainer>
-          © {new Date().getFullYear()} MVP Starter App. All rights reserved.
+          © {new Date().getFullYear()}
         </LeftContainer>
         <CenterContainer>
           <Link href="#">Privacy Policy</Link> | <Link href="#">Terms of Service</Link>
         </CenterContainer>
         <RightContainer>
-          <SocialIcon href="#" aria-label="Facebook">FB</SocialIcon>
-          <SocialIcon href="#" aria-label="Twitter">TW</SocialIcon>
-          <SocialIcon href="#" aria-label="Instagram">IG</SocialIcon>
+          
         </RightContainer>
       </FooterContainer>
     </FooterSection>

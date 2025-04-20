@@ -8,9 +8,7 @@ export const StateContext = ({ children }) => {
 
   // Variables to Carry Across Multiple Pages
   const [user, setUser] = useState(null)
-
   const router = useRouter()
-  const { asPath } = useRouter()
 
   const connectWallet = async () => {
     if (typeof window.ethereum !== 'undefined') {
@@ -24,11 +22,13 @@ export const StateContext = ({ children }) => {
     }
   };
   
+  
   const handleConnectWallet = async (e) => {
     try {
       const { address } = await connectWallet();
       console.log("Connected wallet:", address);
       setUser(address); // Set in global state (if storing address)
+      localStorage.removeItem("loggedOut"); // Clear logout flag on login
     } catch (err) {
       console.error("Wallet connection failed:", err);
     }
@@ -36,8 +36,30 @@ export const StateContext = ({ children }) => {
 
   const logOutWallet = () => {
     setUser(null);
-    localStorage.removeItem("walletAddress"); // Optional
+    localStorage.setItem("loggedOut", "true")
   };
+
+  useEffect(() => {
+    const autoConnectWallet = async () => {
+      const isLoggedOut = localStorage.getItem("loggedOut");
+  
+      if (isLoggedOut === "true") return; // user chose to log out
+  
+      if (typeof window.ethereum !== 'undefined') {
+        const provider = new ethers.providers.Web3Provider(window.ethereum);
+        const accounts = await provider.listAccounts();
+  
+        if (accounts.length > 0) {
+          setUser(accounts[0]);
+          console.log("Auto-connected to:", accounts[0]);
+        }
+      }
+    };
+  
+    autoConnectWallet();
+  }, []);
+  
+  
 
 
   return (
