@@ -8,10 +8,14 @@ import { useRouter } from 'next/router';
 const Dashboard = () => {
   const { user, handleConnectWallet, logOutWallet } = useStateContext();
   const router = useRouter();
-  if (user == null) {
-    router.push('/')
 
-  }
+  useEffect(() => {
+    if (user == null) {
+      router.push('/')
+  
+    }
+  },[user]); // run this effect whenever `user` changes)
+  
   
 
   return (
@@ -21,15 +25,31 @@ const Dashboard = () => {
         <Navbar/>
         
         <Section>
-          <RightSide>
+          <ElementSection>
+            
             <Title>Dashboard</Title>
+            <InfoContainer>
+                User Wallet ID {user}
+            </InfoContainer>
+            <DashboardElements>
 
-            <InfoContainer>User Wallet ID {user}</InfoContainer>
+              
             
-            <ScrollableMainSection>
+                        <ScrollableMainSection>
+                        bepis1
+                        </ScrollableMainSection>
+                        <ScrollableMainSection>
+                        bepis2
+                        </ScrollableMainSection>
+                        
+                        
+
+                        
+                
+            </DashboardElements>
+
+          </ElementSection>
             
-            </ScrollableMainSection>
-            </RightSide>
 
         </Section>
     </>
@@ -44,7 +64,7 @@ const Section = styled.section`
   padding: 2vw;
 
 `
-const RightSide = styled.div`
+const ElementSection = styled.div`
   display: flex;
   flex-grow: 1; /* Allows it to take the remaining space */
   flex-direction: column;
@@ -52,6 +72,17 @@ const RightSide = styled.div`
   justify-content: flex-start;
   padding: 20px; /* Provides padding around the content */
   background-color: #f8f9fa; /* A light background color */
+`;
+
+const DashboardElements = styled.div`
+  display: flex;
+  flex-grow: 1; /* Allows it to take the remaining space */
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 20px; /* Provides padding around the content */
+  background-color: #f8f9fa; /* A light background color */
+  gap:15px;
 `;
 
 const Title = styled.h2`
@@ -63,11 +94,14 @@ const Title = styled.h2`
 const ScrollableMainSection = styled.div`
   display: flex;
   flex-direction: column;
-  justify-content: flex-start;
+  // justify-content: flex-start;
   align-items: center;
   width: 100%; /* Takes the full width of its container */
-  max-width: 600px; /* Maximum width to maintain readability */
-  height: 70vh;
+  min-height: 300px;
+  min-width: 300px;
+  max-height: 500px; /* Maximum Height to maintain readability */
+  max-width: 500px;
+  height: 50vh;
   overflow-y: auto;
   padding: 10px;
   border-radius: 8px; /* Adds rounded corners */
@@ -78,12 +112,12 @@ const ScrollableMainSection = styled.div`
 
 const InfoContainer = styled.div`
   display: flex;
-  justify-content: space-between; /* Spreads content across the container */
+  justify-content: inline-block; /* Spreads content across the container */
   align-items: center;
   border-radius: 8px; /* Rounded corners for a modern look */
   box-shadow: 0 2px 4px rgba(0,0,0,0.1); /* Consistent shadow with the main section */
   padding: 12px; /* More padding for a spacious feel */
-  width: 100%; /* Full width to utilize available space */
+  width: ; /* width to utilize available space */
   margin: 10px 0; /* Adds margin for spacing between items */
   background-color: #fafafa; /* Slightly off-white for subtle contrast */
 `;
