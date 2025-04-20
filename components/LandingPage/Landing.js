@@ -2,11 +2,23 @@ import React from 'react';
 import styled from 'styled-components';
 import GlobalStyle from '/pages/_app.js'; 
 import { useRouter } from 'next/router';
-import {handleConnectWallet} from '/components/Dashboard/Navbar'
+import {handleConnectWallet} from '/components/Dashboard/Navbar';
+import { useStateContext } from '@/context/StateContext';
 
 
 const Landing = () => {
+  const { user, handleConnectWallet, logOutWallet } = useStateContext()
   const router = useRouter();
+
+  const login = async () => {
+    await handleConnectWallet();
+    };
+
+  if (user !== null) {
+    router.push('/dashboard')
+
+  }
+  
   return (
     <Section>
       <Overlay>
@@ -18,7 +30,7 @@ const Landing = () => {
             </Header>
             <SubheaderAndStarsColumn>
               {/* <SubHeader>Insert creative subheader here</SubHeader> */}
-              <CTAButton onClick = {handleConnectWallet} >Get Started</CTAButton>
+              <CTAButton onClick = {login} >Log Into Wallet</CTAButton>
             </SubheaderAndStarsColumn>
           </HeroTextColumn>
         </Container>
