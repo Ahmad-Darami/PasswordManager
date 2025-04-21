@@ -2,9 +2,7 @@ import {ethers} from 'ethers';
 import React from 'react';
 import styled from 'styled-components';
 import Link from 'next/link'
-import { logOut } from '@/backend/Auth';
 import { useStateContext } from '@/context/StateContext';
-import Home from '@/components/Dashboard/Home'
 
 
 
@@ -21,7 +19,7 @@ const Navbar = () => {
     <Nav>
       <NavLinks>
       <Logo href="/">BlockPass</Logo>
-      <ButtonLink href="/dashboard">Dashboard</ButtonLink>
+      {/* <ButtonLink href="/dashboard">Dashboard</ButtonLink> */}
       </NavLinks>
       <NavLinks>
       {user ? (
@@ -93,8 +91,6 @@ const Walletbutton = styled.button`
   box-shadow: #D6D6E7 0 3px 7px inset;
   transform: translateY(2px);
   }
-
-  
 
 `;
 
