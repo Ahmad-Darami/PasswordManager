@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import styled from 'styled-components'
 import Link from 'next/link'
 import Navbar from '@/components/Dashboard/Navbar'
+import Footer from '@/components/LandingPage/Footer'
 import { useStateContext } from '@/context/StateContext';
 import { useRouter } from 'next/router';
 import {ethers} from 'ethers';
@@ -30,13 +31,13 @@ const Dashboard = () => {
             <TitleElements>
                 <Title>Dashboard</Title>
                 <div>
-                <DashButton>New Secret Note</DashButton>
-                <DashButton>New Password</DashButton>
+                <DashButton onClick={() => router.push('/NewSecretNote')}>New Secret Note</DashButton>
+                <DashButton onClick={() => router.push('/NewPassword')}>New Password</DashButton>
                 </div>
             </TitleElements>
             <></>
             <InfoContainer>
-                User Wallet ID {user}
+                Wallet ID: {user}
             </InfoContainer>
             <DashboardElements>
 
@@ -59,13 +60,14 @@ const Dashboard = () => {
             
 
         </Section>
+      <Footer/>
     </>
   )
 }
 
 const Section = styled.section`
   display: flex; /* Keeps elements side by side */
-  height: 90vh;
+  height: 86.5vh;
   width: 100%;
   background-color: #EEEEEE;
   padding: 2vw;
@@ -79,6 +81,7 @@ const ElementSection = styled.div`
   justify-content: flex-start;
   padding: 20px; /* Provides padding around the content */
   background-color: #f8f9fa; /* A light background color */
+  border-radius: 5px;
 `;
 
 

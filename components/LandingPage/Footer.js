@@ -23,7 +23,7 @@ const FooterSection = styled.footer`
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 10vh;
+  height: 8vh;
   color: #fff;
   background-color: #333;
   padding: 20px 0;

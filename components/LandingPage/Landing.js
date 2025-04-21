@@ -42,7 +42,7 @@ const Landing = () => {
 const Section = styled.section`
   display: flex;
   flex-direction: column;
-  height: 85vh;
+  height: 86.5vh;
   color: #fff;
   background: linear-gradient(150deg, #6a11cb 0%, #2575fc 100%);
   position: relative;
