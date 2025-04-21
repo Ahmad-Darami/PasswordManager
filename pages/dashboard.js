@@ -4,6 +4,7 @@ import Link from 'next/link'
 import Navbar from '@/components/Dashboard/Navbar'
 import { useStateContext } from '@/context/StateContext';
 import { useRouter } from 'next/router';
+import {ethers} from 'ethers';
 
 const Dashboard = () => {
   const { user, handleConnectWallet, logOutWallet } = useStateContext();
@@ -15,7 +16,7 @@ const Dashboard = () => {
   
     }
   },[user]); // run this effect whenever `user` changes)
-  
+  console.log(ethers)
   
 
   return (
@@ -26,8 +27,14 @@ const Dashboard = () => {
         
         <Section>
           <ElementSection>
-            
-            <Title>Dashboard</Title>
+            <TitleElements>
+                <Title>Dashboard</Title>
+                <div>
+                <DashButton>New Secret Note</DashButton>
+                <DashButton>New Password</DashButton>
+                </div>
+            </TitleElements>
+            <></>
             <InfoContainer>
                 User Wallet ID {user}
             </InfoContainer>
@@ -39,7 +46,7 @@ const Dashboard = () => {
                         bepis1
                         </ScrollableMainSection>
                         <ScrollableMainSection>
-                        bepis2
+                        bepis2 
                         </ScrollableMainSection>
                         
                         
@@ -74,6 +81,47 @@ const ElementSection = styled.div`
   background-color: #f8f9fa; /* A light background color */
 `;
 
+
+const TitleElements = styled.div`
+  display: flex;
+  width: 100%;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px;
+  background-color: #f8f9fa;
+  gap: 15px;
+`;
+
+
+const DashButton = styled.button`
+background-color: ${(props) => (props.primary ? '#ffa500' : 'transparent')};
+  color: ${(props) => (props.primary ? '#ffffff' : '#ffa500')};
+  padding: 0.5rem 1rem;
+  border: 1px solid #007bff;
+  color:rgb(0, 0, 0); 
+  border-radius: 5px;
+  text-decoration: none;
+  font-weight: bold;
+  cursor:pointer;
+  transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out;
+  margin:10px;
+
+  &:hover {
+    background-color: ${(props) => (props.primary ? '#ff8c00' : '#007bff')};
+    color: #ffffff;
+  }
+
+  &:button:focus {
+  outline: none;
+  box-shadow: #D6D6E7 0 0 0 1.5px inset, rgba(83, 109, 254, 0.4) 0 2px 4px, rgba(83, 109, 254, 0.3) 0 7px 13px -3px, #D6D6E7 0 -3px 0 inset;
+  }
+  &:button:active {
+  box-shadow: #D6D6E7 0 3px 7px inset;
+  transform: translateY(2px);
+  }
+`;
+
 const DashboardElements = styled.div`
   display: flex;
   flex-grow: 1; /* Allows it to take the remaining space */
@@ -86,28 +134,34 @@ const DashboardElements = styled.div`
 `;
 
 const Title = styled.h2`
+  display:flex;
   font-size: 24px; /* Makes the font size responsive */
-  margin-bottom: 16px; /* Adds spacing below the title */
+  margin: 10px; /* Adds spacing below the title */
   color: #333; /* Darker text color for better readability */
+  text-align:center;
+  align-items:center;
 `;
 
 const ScrollableMainSection = styled.div`
   display: flex;
   flex-direction: column;
-  // justify-content: flex-start;
-  align-items: center;
-  width: 100%; /* Takes the full width of its container */
+  // align-items: center;
   min-height: 300px;
   min-width: 300px;
   max-height: 500px; /* Maximum Height to maintain readability */
-  max-width: 500px;
-  height: 50vh;
+  max-width: 300px;
+  height: auto;
   overflow-y: auto;
   padding: 10px;
   border-radius: 8px; /* Adds rounded corners */
   box-shadow: 0 2px 4px rgba(0,0,0,0.1); /* Soft shadow for depth */
   background-color: #fff; /* White background for the scrollable area */
+  word-break: break-word;
+  white-space:normal;
 `;
+
+
+
 
 
 const InfoContainer = styled.div`
