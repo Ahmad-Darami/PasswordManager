@@ -17,7 +17,6 @@ const Dashboard = () => {
   
     }
   },[user]); // run this effect whenever `user` changes)
-  console.log(ethers)
   
 
   return (
