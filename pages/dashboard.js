@@ -11,12 +11,45 @@ const Dashboard = () => {
   const { user, handleConnectWallet, logOutWallet } = useStateContext();
   const router = useRouter();
 
+  const [dataFromContract, setDataFromContract] = useState(null)
+
   useEffect(() => {
     if (user == null) {
       router.push('/')
   
     }
   },[user]); // run this effect whenever `user` changes)
+
+  const callPasswordData = async () => {
+    // find a way to call from smartcontract. once finished, then useState: 
+    // and change placeholder
+
+    setDataFromContract("placeholder")
+    
+
+  }
+
+
+  const returnedDataAfterViewDataCall = (data) => {
+    
+
+    if(!dataFromContract){
+      return <p>Loading data....</p>
+    }
+
+
+    return (
+      <Section>
+        {dataFromContract.map((val, idx) => (
+          <BoxContainer key={idx}>
+            <div>Password Name: {val.ipfsHash}</div>
+            <div>Timestamp: {val.timestamp}</div>
+          </BoxContainer>
+        ))}
+      </Section>
+    );
+  };
+
   
 
   return (
