@@ -8,6 +8,7 @@ export const StateContext = ({ children }) => {
 
   // Variables to Carry Across Multiple Pages
   const [user, setUser] = useState(null)
+  const [signer, setSigner] = useState()
   const router = useRouter()
 
   const connectWallet = async () => {
@@ -15,6 +16,7 @@ export const StateContext = ({ children }) => {
       const provider = new ethers.providers.Web3Provider(window.ethereum);
       await provider.send("eth_requestAccounts", []);
       const signer = provider.getSigner();
+      setSigner(signer)
       const address = await signer.getAddress();
       return { provider, signer, address };
     } else {
@@ -70,6 +72,7 @@ export const StateContext = ({ children }) => {
         connectWallet,
         handleConnectWallet,
         logOutWallet,
+        signer,
       }}
     >
       {children}
