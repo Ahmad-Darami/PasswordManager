@@ -6,10 +6,22 @@ import Footer from '@/components/LandingPage/Footer'
 import { useStateContext } from '@/context/StateContext';
 import { useRouter } from 'next/router';
 import {ethers} from 'ethers';
+import { CONTRACT_ABI, CONTRACT_ADDRESS } from '@/contracts/contract'
+import { decryptText } from '@/backend/encrypt'
+import DecryptedModal from '@/components/Windows/Modal'
 
 const Dashboard = () => {
   const { user, handleConnectWallet, logOutWallet } = useStateContext();
   const router = useRouter();
+  const [passwords,setPasswords] = useState([]);
+  const [notes,setNotes] = useState([]);
+  const {signer} = useStateContext();
+
+  const [activeTag, setactiveTag] = useState('')
+  const [decryptednote,setDecryptednote] = useState('')
+  const [showPassword, setShowPassword] = useState(false)
+  const [TempHash, setTempHash] = useState('')
+  
 
   const [dataFromContract, setDataFromContract] = useState(null)
 
@@ -20,15 +32,32 @@ const Dashboard = () => {
     }
   },[user]); // run this effect whenever `user` changes)
 
-  const callPasswordData = async () => {
-    // find a way to call from smartcontract. once finished, then useState: 
-    // and change placeholder
+  useEffect(() => {
+    const fetchPasswords = async () => {
+      if (!signer) return;
+  
+      try {
+        const contract = new ethers.Contract(CONTRACT_ADDRESS, CONTRACT_ABI, signer);
+        const result = await contract.viewNotes(); // this is your smart contract function
+        setNotes(result);
+        console.log("Fetched passwords:", result);
+      } catch (err) {
+        console.error("Failed to load passwords:", err);
+      }
+    };
+  
+    fetchPasswords();
+  }, [signer]);
 
-    setDataFromContract("placeholder")
-    
-
+  const handleDecrypt = async () => {
+    try {
+    const result = await decryptText(TempHash,signer)
+    setDecrypted(result)
+    setShowPassword(true)
+    } catch (err) {
+      console.error('Decryption failed:',err)
+    }
   }
-
 
   const returnedDataAfterViewDataCall = (data) => {
     
@@ -72,15 +101,49 @@ const Dashboard = () => {
                 Wallet ID: {user}
             </InfoContainer>
             <DashboardElements>
+            {notes.length > 0 ? (
+  notes.map((entry, index) => {
+    const handleDecryptThisEntry = async () => {
+      try {
+        const result = await decryptText(entry.ipfsHash, signer);
+        setDecryptednote(result);
+        setactiveTag(entry.DecodedHint);
+        setShowPassword(true);
+      } catch (err) {
+        console.error('Decryption failed:', err);
+      }
+    };
 
-              
-            
-                        <ScrollableMainSection>
-                        bepis1
-                        </ScrollableMainSection>
-                        <ScrollableMainSection>
-                        bepis2 
-                        </ScrollableMainSection>
+    return (
+      <EntryCards key={index} style={{
+        border: '1px solid #ccc',
+        padding: '16px',
+        marginBottom: '16px',
+        borderRadius: '8px',
+        backgroundColor: '#f9f9f9'
+      }}>
+        <p><strong>Tag:</strong> {entry.DecodedHint}</p>
+        <p><strong>Timestamp:</strong> {new Date(Number(entry.timestamp) * 1000).toLocaleString()}</p>
+        <p><strong>IPFS Hash:</strong> {entry.ipfsHash.slice(0, 6)}...{entry.ipfsHash.slice(-4)}</p>
+        <button onClick={handleDecryptThisEntry}>decrypt</button>
+      </EntryCards>
+    );
+  })
+) : (
+  <p>No notes stored yet.</p>
+)}
+
+              {showPassword && (
+              <>
+                <Overlay onClick={() => setShowPassword(false)} />
+                {/* <ModalBox>
+                  <h3>Decrypted Password</h3>
+                  <p>{decryptednote}</p>
+                  <button onClick={() => setShowPassword(false)}>Close</button>
+                </ModalBox> */}
+              </>
+              )}
+                        
                         
                         
 
@@ -93,9 +156,49 @@ const Dashboard = () => {
 
         </Section>
       <Footer/>
+      {showPassword && (
+  <DecryptedModal
+    decrypted={decryptednote}
+    tag={activeTag}
+    onClose={() => setShowPassword(false)}
+  />
+  )}
     </>
   )
 }
+
+const ModalBox = styled.div`
+  position: fixed;
+  top: 30%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: white;
+  padding: 20px;
+  border-radius: 10px;
+  border: 2px solid #ccc;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  z-index: 1000;
+`;
+
+const Overlay = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.41);
+  z-index: 999;
+`;
+
+const EntryCards = styled.div`
+  width: 300px;                   /* fixed card width for wrapping */
+  padding: 16px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  background-color: #fff;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);  
+
+`
 
 const Section = styled.section`
   display: flex; /* Keeps elements side by side */
@@ -108,6 +211,7 @@ const Section = styled.section`
 const ElementSection = styled.div`
   display: flex;
   flex-grow: 1; /* Allows it to take the remaining space */
+  max-height:80vh;
   flex-direction: column;
   align-items: center;
   justify-content: flex-start;
@@ -159,13 +263,16 @@ background-color: ${(props) => (props.primary ? '#ffa500' : 'transparent')};
 
 const DashboardElements = styled.div`
   display: flex;
-  flex-grow: 1; /* Allows it to take the remaining space */
-  flex-direction: row;
-  align-items: center;
+  flex-wrap: wrap;                /* wraps items to form rows */
+  flex-direction: row;            /* row-wise layout */
+  align-items: flex-start;
   justify-content: flex-start;
-  padding: 20px; /* Provides padding around the content */
-  background-color: #f8f9fa; /* A light background color */
-  gap:15px;
+  width:80%;
+  gap: 15px;
+  padding: 20px;
+  max-height: 80vh;               /* limits height */
+  overflow-y: auto;               /* scrolls vertically if too tall */
+  overflow-x: hidden;             /* no horizontal scroll */
 `;
 
 const Title = styled.h2`
