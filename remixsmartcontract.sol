@@ -68,7 +68,10 @@ contract SecretStore {
         return userNotes[msg.sender];
     }
 
+    function deleteAll() external {
+    delete userPasswords[msg.sender];
+    delete userNotes[msg.sender];
+    }
+
 }
-
-
 
