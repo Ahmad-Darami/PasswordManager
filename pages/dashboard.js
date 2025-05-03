@@ -303,10 +303,10 @@ background-color: ${(props) => (props.primary ? '#ffa500' : 'transparent')};
 const DashboardElements = styled.div`
   display: flex;
   flex-wrap: wrap;                /* wraps items to form rows */
-  flex-direction: column;            /* row-wise layout */
+  flex-direction: row;            /* row-wise layout */
   align-items: flex-start;
   justify-content: center;
-  width:100%;
+  width:80%;
   gap: 15px;
   padding: 20px;
   max-height: 80vh;               /* limits height */
