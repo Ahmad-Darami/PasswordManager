@@ -6,10 +6,9 @@ const Footer = () => {
     <FooterSection>
       <FooterContainer>
         <LeftContainer>
-          © {new Date().getFullYear()}
         </LeftContainer>
         <CenterContainer>
-          <Link href="#">Privacy Policy</Link> | <Link href="#">Terms of Service</Link>
+          <Link href="https://www.youtube.com/watch?v=dQw4w9WgXcQ">Privacy Policy</Link> 
         </CenterContainer>
         <RightContainer>
           

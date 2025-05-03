@@ -7,9 +7,11 @@ import {ethers, Signer} from 'ethers';
 import {CONTRACT_ABI, CONTRACT_ADDRESS} from '@/contracts/contract'
 import { encryptText, decryptText, getEncryptionKey } from "@/backend/encrypt";
 import { useStateContext } from "@/context/StateContext";
+import { useRouter } from 'next/router';
 
 
 const NewSecretNote = () => {
+  const { user, handleConnectWallet, logOutWallet } = useStateContext()
   const [Textbody, setTextbody] = useState('');
   const [EncryptedText, SetEncryptedText] = useState('');
   const [response,setResponse] = useState('');
@@ -17,6 +19,14 @@ const NewSecretNote = () => {
   const [Timestamp, setTimestamp] = useState('');
   const {signer} = useStateContext();
   const WalletAddress = "empty address"
+  const router = useRouter();
+
+  useEffect(() => {
+      if (user == null) {
+        router.push('/')
+    
+      }
+    },[user]); // run this effect whenever `user` changes)
 
 
   const encryptAndSend = async() => {
@@ -70,7 +80,7 @@ const NewSecretNote = () => {
       <SubmitButton onClick={(e) => encryptAndSend()}>Encrypt and Send</SubmitButton>
       {setResponse && (
         <p style={{ marginTop: '10px', wordBreak: 'break-all' }}>
-          🔒 Encrypted Text: <br /> {EncryptedText}
+          {response} <br /> 🔒 Encrypted Text:  <br /> {EncryptedText}
         </p>
       )}
 
