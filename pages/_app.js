@@ -63,7 +63,6 @@ export default function App({ Component, pageProps }) {
             <Component {...pageProps} />
           </motion.div>
         </AnimatePresence>
-        <Component {...pageProps} />
       </StateContext>
     </>
   )
