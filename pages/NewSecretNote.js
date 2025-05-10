@@ -66,7 +66,7 @@ const NewSecretNote = () => {
       <Title>Add a New Secret Note</Title>
       
       <InputText 
-      placeholder='enter decryped code'
+      placeholder='enter decrypted code'
       value = {Textbody}
       onChange={(e) => setTextbody(e.target.value)}
       ></InputText>

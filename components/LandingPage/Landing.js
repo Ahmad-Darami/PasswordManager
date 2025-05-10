@@ -1,8 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import GlobalStyle from '/pages/_app.js'; 
 import { useRouter } from 'next/router';
-import {handleConnectWallet} from '/components/Dashboard/Navbar';
 import { useStateContext } from '@/context/StateContext';
 
 
